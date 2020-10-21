@@ -4,7 +4,7 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 윈도우 운영체제 환경에서 작업하였습니다.  
 
 
-### 소스를 돌리기 위해 Visual Studio 상에서 다음 작업을 합니다.
+#### 소스를 돌리기 위해 Visual Studio 상에서 다음 작업을 합니다.
 
 
 1. 프로젝트 -> 속성 -> 구성 속성 -> 링커 -> 입력 -> 추가 종속성 -> ws2_32.lib 추가   
@@ -16,10 +16,10 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 3. Debug -> Release 모드로 변경(실행파일을 만들기 위함)   
 
 
-4. cmd에서 Release 폴더로 이동한 후에 `실행파일명 포트번호` 입력   
+4. cmd에서 Release 폴더로 이동한 후에 `실행파일명 포트번호` 입력      
 
 
-
+   
 ## 네트워크 프로그래밍과 소켓   
 
 네트워크로 연결되어 있는 서로 다른 두 컴퓨터가 데이터를 주고받을 수 있도록 하는 것이 `네트워크 프로그래밍`이다.    
@@ -39,7 +39,7 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 `소켓`은 네트워크를 통한 두 컴퓨터의 연결을 의미하기도 한다.      
 
 
-
+   
 ## 서버 소켓의 개요   
 
 - 1단계. 소켓 생성 `socket` 함수 호출   
@@ -48,7 +48,7 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 - 4단계. 연결요청에 대한 수락 `accept` 함수 호출      
 
 
-
+   
 ## 리눅스 기반 파일 조작하기   
 
 리눅스는 소켓을 파일의 일종으로 구분한다.   
@@ -94,7 +94,75 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 - fd : 데이터 수신 대상을 나타내는 파일 디스크립터 전달.   
 - buf : 수신한 데이터를 저장할 버퍼의 주소 값 전달.   
 - nbytes : 수신할 최대 바이트 수 전달.   
-- 성공 시 수신한 바이트 수(단, 파일의 끝을 만나면 0), 실패 시 -1 반환   
+- 성공 시 수신한 바이트 수(단, 파일의 끝을 만나면 0), 실패 시 -1 반환      
+
+
+   
+## 윈도우 기반의 서버 소켓 관련 함수   
+
+
+#### 윈속(winsock)의 초기화   
+
+윈속 프로그래밍을 할 때에는 반드시 `WSAStartup` 함수를 호출해서,   
+프로그램에서 요구하는 윈도우 소켓의 버전을 알리고,   
+해당 버전을 지원하는 라이브러리의 초기화 작업을 진행해야 한다.      
+
+`int WSAStartup(WORD wVersionRequested, LPWSADATA lpWSAData);`   
+
+- wVersionRequested : 프로그래머가 사용할 윈속의 버전정보 전달.   
+- lpWSAData : WSADATA라는 구조체 변수의 주소 값 전달.   
+- 성공 시 0, 실패 시 0이 아닌 에러코드 값 반환   
+
+위의 함수를 호출하는 아래의 코드는 윈속 기반의 프로그래밍에서는 공식과 같이 등장한다.      
+
+int main(int argc, char* argv[]) {   
+
+  WSADATA wsaData;      
+   
+   
+  ...   
+   
+  if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) ErrorHandling("WSAStartup() error!");   
+   
+
+  ...   
+   
+  return 0;   
+}   
+   
+다음은 위의 윈속 라이브러리의 해제에 사용되는 함수이다.   
+
+`int WSACleanup(void);`   
+
+- 성공 시 0, 실패 시 SOCKET_ERROR 반환      
+
+
+#### 소켓 생성   
+
+`SOCKET socket(int af, int type, int protocol);`   
+
+- 성공 시 소켓 핸들, 실패 시 INVALID_SOCKET 반환   
+
+
+#### IP주소와 PORT번호 할당   
+
+`int bind(SOCKET s, const struct sockaddr * name, int namelen);`   
+
+- 성공 시 소켓 핸들, 실패 시 SOCKET_ERROR 반환   
+
+
+#### 연결 요청 가능 상태로 변경   
+
+`int listen(SOCKET s, int backlog);`   
+
+- 성공 시 0, 실패 시 SOCKET_ERROR 반환   
+
+
+#### 연결 요청에 대한 수락   
+
+`SOCKET accept(SOCKET s, struct sockaddr * addr, int * addrlen);`   
+
+- 성공 시 소켓 핸들, 실패 시 INVALID_SOCKET 반환   
 
 
 
