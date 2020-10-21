@@ -17,8 +17,8 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 
 
 4. cmd에서 Release 폴더로 이동한 후에 `실행파일명 포트번호` 입력      
-
-
+   
+   
    
 ## 네트워크 프로그래밍과 소켓   
 
@@ -37,8 +37,8 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 
 정리하자면, 프로그래밍에서의 `소켓`은 네트워크 망의 연결에 사용하는 도구이다.   
 `소켓`은 네트워크를 통한 두 컴퓨터의 연결을 의미하기도 한다.      
-
-
+   
+   
    
 ## 서버 소켓의 개요   
 
@@ -46,8 +46,8 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 - 2단계. IP주소와 PORT번호 할당 `bind` 함수 호출   
 - 3단계. 연결요청 가능상태로 변경 `listen` 함수 호출   
 - 4단계. 연결요청에 대한 수락 `accept` 함수 호출      
-
-
+   
+   
    
 ## 리눅스 기반 파일 조작하기   
 
@@ -95,8 +95,8 @@ C를 이용한 Tcp / Ip Socket 프로그래밍 연습입니다.
 - buf : 수신한 데이터를 저장할 버퍼의 주소 값 전달.   
 - nbytes : 수신할 최대 바이트 수 전달.   
 - 성공 시 수신한 바이트 수(단, 파일의 끝을 만나면 0), 실패 시 -1 반환      
-
-
+   
+   
    
 ## 윈도우 기반의 서버 소켓 관련 함수   
 
@@ -163,7 +163,25 @@ int main(int argc, char* argv[]) {
 `SOCKET accept(SOCKET s, struct sockaddr * addr, int * addrlen);`   
 
 - 성공 시 소켓 핸들, 실패 시 INVALID_SOCKET 반환   
+   
+   
+   
+## 윈도우 기반의 클라이언트 소켓 관련 함수   
 
+#### 서버로의 연결 요청   
+
+`int connect(SOCKET s, const struct sockaddr * name, int namelen);`   
+
+- 성공 시 0, 실패 시 SOCKET_ERROR 반환   
+
+#### 소켓 연결 닫기   
+
+리눅스에서는 파일을 닫을 때에도, 소켓을 닫을 때에도 `close` 함수를 호출하지만,   
+윈도우에서는 소켓을 닫을 때 호출하는 다음 함수가 별도로 마련되어 있다.   
+
+`int closesocket(SOCKET s);`   
+
+- 성공 시 0, 실패 시 SOCKET_ERROR 반환   
 
 
 
